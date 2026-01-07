@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>全国フルマラソン大会一覧</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #fce4ec);
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .table-wrapper {
+      max-width: 1200px;
+      margin: auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #26a69a;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    tr:hover {
+      background: #e0f2f1;
+      transition: 0.2s;
+    }
+
+    tr.past {
+      color: #999;
+      background: #f0f0f0 !important;
+    }
+
+    caption {
+      caption-side: bottom;
+      padding: 12px;
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🏃 全国フルマラソン大会一覧</h1>
+
+<div class="table-wrapper">
+  <table id="marathon-table">
+    <thead></thead>
+    <tbody></tbody>
+    <caption>※ 情報は公式サイトで必ずご確認ください</caption>
+  </table>
+</div>
+
+<script>
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR71anephIJi7lf0Ih5fKmcWShq8R3NoVlP0OZMI-jwO0Yc6Vn7mBnfGGQvrM6Ztg8x2qVBmtLjXLhl/pub?gid=0&single=true&output=csv
+";
+
+  fetch(csvUrl)
+    .then(res => res.text())
+    .then(text => {
+      const rows = text.trim().split("\n").map(r => r.split(","));
+      const thead = document.querySelector("thead");
+      const tbody = document.querySelector("tbody");
+
+      const headerRow = rows.shift();
+      thead.innerHTML =
+        "<tr>" + headerRow.map(h => `<th>${h}</th>`).join("") + "</tr>";
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      rows.forEach(row => {
+        const tr = document.createElement("tr");
+
+        // 開催日（3列目）
+        const eventDate = new Date(row[2]);
+        if (!isNaN(eventDate) && eventDate < today) {
+          tr.classList.add("past");
+        }
+
+        tr.innerHTML = row.map(c => `<td>${c}</td>`).join("");
+        tbody.appendChild(tr);
+      });
+    });
+</script>
+
+</body>
+</html>
