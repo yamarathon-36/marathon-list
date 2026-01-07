@@ -80,10 +80,46 @@
 <script>
   const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR71anephIJi7lf0Ih5fKmcWShq8R3NoVlP0OZMI-jwO0Yc6Vn7mBnfGGQvrM6Ztg8x2qVBmtLjXLhl/pub?gid=0&single=true&output=csv";
 
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const next = text[i + 1];
+
+      if (char === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((char === "\n" || char === "\r") && !inQuotes) {
+        if (cell || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+      } else {
+        cell += char;
+      }
+    }
+    if (cell || row.length) {
+      row.push(cell);
+      rows.push(row);
+    }
+    return rows;
+  }
+
   fetch(csvUrl)
     .then(res => res.text())
     .then(text => {
-      const rows = text.trim().split("\n").map(r => r.split(","));
+      const rows = parseCSV(text);
       const thead = document.querySelector("thead");
       const tbody = document.querySelector("tbody");
 
@@ -95,9 +131,9 @@
       today.setHours(0,0,0,0);
 
       rows.forEach(row => {
-        const tr = document.createElement("tr");
+        if (row.length < 7) return;
 
-        // 開催日（3列目）
+        const tr = document.createElement("tr");
         const eventDate = new Date(row[2]);
         if (!isNaN(eventDate) && eventDate < today) {
           tr.classList.add("past");
