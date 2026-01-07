@@ -83,7 +83,7 @@
   fetch(csvUrl)
     .then(res => res.text())
     .then(text => {
-      const rows = text.trim().split("\n").map(r => r.split(","));
+      const rows = text.trim().split("\n").map(r => r.split("\t"));
       const thead = document.querySelector("thead");
       const tbody = document.querySelector("tbody");
 
