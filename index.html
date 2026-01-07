@@ -78,12 +78,12 @@
 </div>
 
 <script>
-  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR71anephIJi7lf0Ih5fKmcWShq8R3NoVlP0OZMI-jwO0Yc6Vn7mBnfGGQvrM6Ztg8x2qVBmtLjXLhl/pub?gid=0&single=true&output=tsv";
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR71anephIJi7lf0Ih5fKmcWShq8R3NoVlP0OZMI-jwO0Yc6Vn7mBnfGGQvrM6Ztg8x2qVBmtLjXLhl/pub?gid=0&single=true&output=csv";
 
   fetch(csvUrl)
     .then(res => res.text())
     .then(text => {
-      const rows = text.trim().split("\n").map(r => r.split("\t"));
+      const rows = text.trim().split("\n").map(r => r.split(","));
       const thead = document.querySelector("thead");
       const tbody = document.querySelector("tbody");
 
