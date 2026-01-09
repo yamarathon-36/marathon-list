@@ -68,20 +68,27 @@
     td:nth-child(3) {
       display: none;
     }
+
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
   </style>
 </head>
 <body>
 
 <h1>🏃 全国フルマラソン大会一覧</h1>
-
-<div class="table-wrapper">
-  <table id="marathon-table">
-    <thead></thead>
-    <tbody></tbody>
-    <caption>※ 情報は公式サイトで必ずご確認ください</caption>
-  </table>
+<div class="table-wrap">
+  <div class="table-wrapper">
+    <table id="marathon-table">
+      <thead></thead>
+      <tbody></tbody>
+      <caption>※ 情報は公式サイトで必ずご確認ください</caption>
+    </table>
+  </div>
 </div>
-
+  
 <script>
   const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR71anephIJi7lf0Ih5fKmcWShq8R3NoVlP0OZMI-jwO0Yc6Vn7mBnfGGQvrM6Ztg8x2qVBmtLjXLhl/pub?gid=0&single=true&output=csv";
 
