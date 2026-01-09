@@ -134,7 +134,7 @@
         if (row.length < 7) return;
 
         const tr = document.createElement("tr");
-        const eventDate = new Date(row[2]);
+        const eventDate = new Date(row[3]);
         if (!isNaN(eventDate) && eventDate < today) {
           tr.classList.add("past");
         }
