@@ -139,7 +139,17 @@
           tr.classList.add("past");
         }
 
-        tr.innerHTML = row.map(c => `<td>${c}</td>`).join("");
+        tr.innerHTML = row.map((cell, i) => {
+  // B列（大会名）で、C列（URL）があればリンクにする
+          if (i === 1 && row[2]) {
+            return `<td>
+              <a href="${row[2]}" target="_blank" rel="noopener">
+                ${cell}
+              </a>
+            </td>`;
+          }
+          return `<td>${cell}</td>`;
+        }).join("");
         tbody.appendChild(tr);
       });
     });
