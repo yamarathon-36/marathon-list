@@ -180,7 +180,9 @@
 
         const tr = document.createElement("tr");
         const eventDate = new Date(row[4]);
-        if (!isNaN(eventDate) && eventDate < today) {
+        const isPastEvent = !isNaN(eventDate) && eventDate < today;
+
+        if (isPastEvent) {
           tr.classList.add("past");
         }
 
@@ -196,13 +198,12 @@
           }
 
           // F列（締切日）
-          if (i === 5) {
-            const deadline = new Date(cell);
+          if (i === 5 && !isPastEvent) {
+            const deadline = new Date(cell.replace(/-/g, "/"));
             if (!isNaN(deadline) && deadline < today) {
               return `<td class="deadline-passed">${cell}</td>`;
             }
           }
-
           return `<td>${cell}</td>`;
         }).join("");
 
