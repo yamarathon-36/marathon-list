@@ -101,6 +101,11 @@
       color: #d93025;        /* Google系の赤 */
       font-weight: bold;
     }
+
+    .deadline-passed {
+      color: #d93025;
+      font-weight: bold;
+    }
     
   </style>
 </head>
@@ -180,7 +185,8 @@
         }
 
         tr.innerHTML = row.map((cell, i) => {
-  // B列（大会名）で、C列（URL）があればリンクにする
+
+          // B列（大会名）＋ URL
           if (i === 1 && row[2]) {
             return `<td>
               <a href="${row[2]}" target="_blank" rel="noopener">
@@ -188,8 +194,18 @@
               </a>
             </td>`;
           }
+
+          // F列（締切日）
+          if (i === 5) {
+            const deadline = new Date(cell);
+            if (!isNaN(deadline) && deadline < today) {
+              return `<td class="deadline-passed">${cell}</td>`;
+            }
+          }
+
           return `<td>${cell}</td>`;
         }).join("");
+
         tbody.appendChild(tr);
       });
     });
